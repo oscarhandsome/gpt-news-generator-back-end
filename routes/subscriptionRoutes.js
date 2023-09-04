@@ -4,26 +4,34 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
+router.use(authController.protect);
+
 router
   .route('/')
   .get(subscriptionController.getAllSubscriptions)
   .post(
-    authController.protect,
+    // authController.protect,
     authController.restrictTo('admin'),
     subscriptionController.createSubscription
   );
 
 router.get(
   '/my-subscription',
-  authController.protect,
+  // authController.protect,
   subscriptionController.getMySubscription
 );
 
-router.use(authController.protect, authController.restrictTo('admin'));
+// router.use(
+//   // authController.protect,
+//   authController.restrictTo('admin')
+// );
 router
   .route('/:id')
   .get(subscriptionController.getSubscription)
   .patch(subscriptionController.updateSubscription)
-  .delete(subscriptionController.deleteSubscription);
+  .delete(
+    authController.restrictTo('admin'),
+    subscriptionController.deleteSubscription
+  );
 
 module.exports = router;
