@@ -7,6 +7,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp'); // Express middleware to protect against HTTP Parameter Pollution attacks
 const cors = require('cors'); // CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -61,6 +62,8 @@ app.use((req, res, next) => {
 
 // Serving static files
 // app.use(express.static(`${__dirname}/public`));
+
+app.use(compression());
 
 // Test middleware
 app.use((req, res, next) => {
