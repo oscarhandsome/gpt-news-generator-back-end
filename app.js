@@ -19,6 +19,8 @@ const subscriptionRouter = require('./routes/subscriptionRoutes');
 
 const app = express();
 
+app.enable('trust proxy'); // adding for heroku for secure connections
+
 // ENABLE CORS
 app.use(cors());
 
