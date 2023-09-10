@@ -22,6 +22,11 @@ const app = express();
 app.enable('trust proxy'); // adding for heroku for secure connections
 
 // ENABLE CORS
+// app.use(
+//   cors({
+//     origin: 'https://gpt-chat-news-generator.netlify.app'
+//   })
+// );
 app.use(cors());
 
 // 1) GLOBAL MIDDLAWARES
