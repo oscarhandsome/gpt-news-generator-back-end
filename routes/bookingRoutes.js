@@ -12,11 +12,11 @@ router.get(
   bookingController.getCheckoutSession
 );
 
-router.post(
-  '/checkout-payment',
-  // authController.protect,
-  bookingController.createBookingCheckout
-);
+// router.post(
+//   '/checkout-payment',
+//   // authController.protect,
+//   bookingController.createBookingCheckout
+// );
 
 router.use(authController.restrictTo('admin'));
 
