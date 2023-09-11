@@ -17,7 +17,7 @@ router
 
 router.get(
   '/my-subscription',
-  // authController.protect,
+  authController.protect,
   subscriptionController.getMySubscription
 );
 
