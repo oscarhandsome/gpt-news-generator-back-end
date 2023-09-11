@@ -4,13 +4,13 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-router.use(authController.protect);
+// router.use(authController.protect);
 
 router
   .route('/')
   .get(subscriptionController.getAllSubscriptions)
   .post(
-    // authController.protect,
+    authController.protect,
     authController.restrictTo('admin'),
     subscriptionController.createSubscription
   );
