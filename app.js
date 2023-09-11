@@ -21,15 +21,19 @@ const app = express();
 
 app.enable('trust proxy'); // adding for heroku for secure connections
 
-// ENABLE CORS
+// 1) GLOBAL MIDDLAWARES
+// Implement CORS
+app.use(cors());
+// Access-Control-Allow-Origin *
 // app.use(
 //   cors({
 //     origin: 'https://gpt-chat-news-generator.netlify.app'
 //   })
 // );
-app.use(cors());
 
-// 1) GLOBAL MIDDLAWARES
+app.options('*', cors());
+// app.options('/api/v1/news/:id', cors()); // for preflight phase for delete, patch or put
+
 // Set security HTTP headers
 app.use(
   helmet({
