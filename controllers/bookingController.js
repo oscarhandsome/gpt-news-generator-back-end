@@ -16,9 +16,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     // success_url: `http://localhost:3000/payment/success/?subscription=${
     //   req.params.subscriptionId
     // }&user=${req.user.id}&price=${subscription.price}`,
-    success_url: `${req.protocol}://${req.get(
-      'host'
-    )}/subscriptions/my-subsriptions`,
+    // success_url: `${req.protocol}://${req.get(
+    //   'host'
+    // )}/subscriptions/my-subsriptions`,
+    success_url: `https://gpt-chat-news-generator.netlify.app/subscriptions/my-subsriptions`,
     cancel_url: `${req.protocol}://${req.get('host')}/subscriptions`,
     customer_email: req.user.email,
     client_reference_id: req.params.subscriptionId,
