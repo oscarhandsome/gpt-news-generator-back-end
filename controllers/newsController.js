@@ -325,16 +325,16 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
 exports.getMyNews = catchAsync(async (req, res, next) => {
   // 1) Find all News
   const news = await News.find({ autor: req.user.id });
-  // 2) Find subscriptions with returned IDs
-  const newsIds = news.map(el => el.news);
-  const newsResults = await newsIds.find({
-    _id: { $in: newsIds }
-  });
+  // 2) Find all nes with returned IDs
+  // const newsIds = news.map(el => el._id);
+  // const newsResults = await newsIds.find({
+  //   _id: { $in: newsIds }
+  // });
 
   res.status(200).json({
     status: 'success',
     data: {
-      data: newsResults
+      data: news
     }
   });
 });
