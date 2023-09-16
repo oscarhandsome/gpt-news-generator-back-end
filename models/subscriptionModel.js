@@ -22,7 +22,7 @@ const subscriptionSchema = new mongoose.Schema({
     default: '',
     required: [true, 'Please provide description field!']
   },
-  allowedRequiests: {
+  allowedRequests: {
     type: Number,
     default: 5,
     min: 5,

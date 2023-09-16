@@ -2,6 +2,8 @@ const multer = require('multer');
 const sharp = require('sharp');
 // const fs = require('fs');
 const News = require('./../models/newsModel');
+const Booking = require('./../models/bookingModel');
+const Subscription = require('./../models/subscriptionModel');
 // const APIFeatures = require('../utils/apiFeatures');
 const openai = require('../controllers/openAIController');
 const leapai = require('../controllers/leapAIConroller');
@@ -169,6 +171,24 @@ exports.setUserCreatorId = (req, res, next) => {
   next();
 };
 
+exports.checkSubscriptionAcceess = catchAsync(async (req, res, next) => {
+  const news = await News.find({ autor: req.user.id });
+  const bookings = await Booking.find({ user: req.user.id });
+  const subscriptionIds = bookings.map(el => el.subscription);
+  const subscriptions = await Subscription.find({
+    _id: { $in: subscriptionIds }
+  });
+  if (subscriptions[0].allowedRequests < news.length)
+    return next(new AppError('Quantity of allowed requests is over', 402));
+  if (subscriptions[0].expiresAt < Date.now())
+    return next(new AppError('Subsription is over', 402));
+
+  req.allowedRequests = subscriptions[0].allowedRequests;
+  req.currentCountNews = news.length;
+
+  next();
+});
+
 exports.createNews = catchAsync(async (req, res, next) => {
   // add into db
   const newNews = await News.create(req.body);
@@ -220,7 +240,8 @@ exports.createNews = catchAsync(async (req, res, next) => {
 // });
 
 exports.getAllNews = factory.getAll(News);
-exports.getNews = factory.getOne(News, {
+// exports.getNews = factory.getOne(News, {
+exports.getNews = factory.getOneBySlug(News, {
   path: 'comments',
   select: '-__v -passwordChangedAt'
 });

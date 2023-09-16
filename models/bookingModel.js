@@ -15,9 +15,13 @@ const bookingSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Booking must have a price']
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now()
+  },
+  expiresAt: {
+    type: Date,
+    default: Date.now() + 30 * 24 * 60 * 60 * 1000 // +30 days
   },
   paid: {
     type: Boolean,

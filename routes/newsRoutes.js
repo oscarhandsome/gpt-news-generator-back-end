@@ -44,11 +44,12 @@ router
     authController.protect,
     authController.restrictTo('admin', 'manager', 'user'),
     newsController.setUserCreatorId,
-    newsController.generateOpenAiLeapAi,
-    newsController.createNews
+    newsController.checkSubscriptionAcceess
+    // newsController.generateOpenAiLeapAi,
+    // newsController.createNews
   );
 router
-  .route('/:id')
+  .route('/:slug')
   .get(newsController.getNews)
   .patch(
     authController.protect,
