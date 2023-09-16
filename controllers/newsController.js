@@ -361,3 +361,14 @@ exports.getMyNews = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+exports.getNewsByAutorId = catchAsync(async (req, res, next) => {
+  const news = await News.find({ autor: req.params.id });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: news
+    }
+  });
+});

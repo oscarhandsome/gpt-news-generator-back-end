@@ -37,6 +37,8 @@ router
 
 router.route('/my-news').get(authController.protect, newsController.getMyNews);
 
+router.route('/autor/:id').get(newsController.getNewsByAutorId);
+
 router
   .route('/')
   .get(newsController.getAllNews)
