@@ -26,6 +26,10 @@ const bookingSchema = new mongoose.Schema({
   paid: {
     type: Boolean,
     default: true
+  },
+  allowedRequests: {
+    type: Number,
+    required: [true, 'Booking must have a price']
   }
 });
 

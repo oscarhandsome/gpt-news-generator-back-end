@@ -44,9 +44,9 @@ router
     authController.protect,
     authController.restrictTo('admin', 'manager', 'user'),
     newsController.setUserCreatorId,
-    newsController.checkSubscriptionAcceess
-    // newsController.generateOpenAiLeapAi,
-    // newsController.createNews
+    newsController.checkSubscriptionAcceess,
+    newsController.generateOpenAiLeapAi,
+    newsController.createNews
   );
 router
   .route('/:slug')
