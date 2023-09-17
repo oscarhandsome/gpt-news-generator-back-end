@@ -121,7 +121,7 @@ exports.aliasBestNews = async (req, res, next) => {
 
 exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   // TODO move requests here
-  const { type, famousPerson, place, length } = req.body;
+  const { type, famousPerson, place, length, imageModelId } = req.body;
   // const prompt = `Imagine 3 random words corresponding to these points: famous man or women name and surname, some place name on a earth or some popular event, any verb for a action`;
   const openaiResponse = await openai.chat([
     {
@@ -137,7 +137,8 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   //   prompt: `${req.body[0].name}`
   // });
   const { data, error } = await leapai.generate.generateImage({
-    modelId: 'eab32df0-de26-4b83-a908-a83f3015e971',
+    // modelId: 'eab32df0-de26-4b83-a908-a83f3015e971',
+    modelId: imageModelId,
     // prompt: `8k portrait of an ${famousPerson} as a jedi, star wars revenge of the sith movie scene style, studio photography, volumetric lighting, smiling, realistic, 35mm, expressive, iconic, 8k concept art, photorealistic, high detail`,
     // prompt: `8k portrait of a classic scene from a ${famousPerson} at ${place} featuring a gunslinger in a dusty desert town, high noon, sun directly overhead, photorealistic, highly detailed`
     prompt: `8k portrait of an enchanting, highly detailed, photorealistic, image of a ${
@@ -151,7 +152,8 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     width: 512,
     height: 512,
     steps: 60,
-    strength: 7
+    promptStrength: 7,
+    seed: 4523184
   });
 
   if (error) return next(new AppError(error.message, error.statusCode));
