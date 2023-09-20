@@ -29,7 +29,8 @@ const bookingSchema = new mongoose.Schema({
   }
   // allowedRequests: {
   //   type: Number,
-  //   required: [true, 'Booking must have a quantity of requests']
+  //   default: 100
+  //   // required: [true, 'Booking must have a quantity of requests']
   // }
 });
 

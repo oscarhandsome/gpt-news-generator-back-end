@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
     validate: [validator.isEmail, 'Please provide a valid email']
   },
   photo: { type: String, default: 'https://i.pravatar.cc/100' },
+  position: { type: String, default: 'Correspondent' },
   role: {
     type: String,
     enum: ['user', 'manager', 'admin'],

@@ -121,7 +121,15 @@ exports.aliasBestNews = async (req, res, next) => {
 
 exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   // TODO move requests here
-  const { type, famousPerson, place, newsLength, imageModelId } = req.body;
+  const {
+    type,
+    famousPerson,
+    place,
+    newsLength,
+    imageModelId,
+    promptStrength,
+    steps
+  } = req.body;
   // const prompt = `Imagine 3 random words corresponding to these points: famous man or women name and surname, some place name on a earth or some popular event, any verb for a action`;
   const openaiResponse = await openai.chat([
     {
@@ -151,8 +159,8 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     numberOfImages: 1,
     width: 512,
     height: 512,
-    steps: 60,
-    promptStrength: 7,
+    steps: Number(steps),
+    promptStrength: Number(promptStrength),
     seed: 4523184
   });
 
