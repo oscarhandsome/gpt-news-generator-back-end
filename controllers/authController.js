@@ -348,6 +348,8 @@ exports.googleAuthSignup = catchAsync(async (req, res, next) => {
         user: newUser
       }
     });
+
+    return;
   }
 
   next();
@@ -382,6 +384,7 @@ exports.googleAuthLogin = catchAsync(async (req, res, next) => {
         user: userDB
       }
     });
+    return;
   }
 
   next();
