@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+
 const User = require('./../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('./../utils/appError');
@@ -40,9 +42,26 @@ const createSendToken = (user, statusCode, req, res) => {
   });
 };
 
+async function verify(token) {
+  const client = new OAuth2Client(process.env.GOGGLE_CLIENT_ID_KEY);
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOGGLE_CLIENT_ID_KEY // Specify the CLIENT_ID of the app that accesses the backend
+    // Or, if multiple clients access the backend:
+    //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+  });
+  const payload = ticket.getPayload();
+  // const userid = payload['sub'];
+  // If request specified a G Suite domain:
+  // const domain = payload['hd'];
+  return payload;
+}
+
+// STEP 1 of REGISTRATION
 exports.signup = catchAsync(async (req, res, next) => {
   // const newUser = await User.create(req.body);
-  const newUser = await User.create({
+  // const newUser = await User.create({
+  const newUser = new User({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
@@ -53,10 +72,55 @@ exports.signup = catchAsync(async (req, res, next) => {
     // role: req.body.role,
   });
 
-  const url = `${req.protocol}://${req.get('host')}/me`;
-  await new Email(newUser, url).sendWelcome();
+  const emailConfirmToken = await newUser.createEmailConfirmToken();
+  await newUser.save();
 
-  createSendToken(newUser, 201, req, res);
+  // const url = `${req.protocol}://${req.get('host')}/me`;
+  // await new Email(newUser, url).sendWelcome();
+  const url = `${req.protocol}://${req.get(
+    'host'
+  )}/auth/email-confirm/${emailConfirmToken}`;
+  await new Email(newUser, url).sendEmailConfirm();
+
+  // createSendToken(newUser, 201, req, res);
+  res.status(200).json({
+    status: 'success',
+    message: 'Confrim email sent to your email!'
+  });
+});
+
+// STEP 2 CONFIRM EMAIL AFTER REGISTRATION
+exports.emailConfirm = catchAsync(async (req, res, next) => {
+  console.log('req.params', req.params);
+  // 1) Get user based on user token
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    emailConfirmToken: hashedToken,
+    emailConfirmTokenExpires: {
+      $gt: Date.now()
+    }
+  });
+
+  // 2) If token has not expired, and there is user, set the new password
+  if (!user) {
+    return next(
+      new AppError('Token of email confirmation is invalid or has expired', 400)
+    );
+  }
+  user.emailConfirmed = true;
+  user.emailConfirmToken = undefined;
+  user.emailConfirmTokenExpires = undefined;
+  await user.save({
+    validateBeforeSave: false
+  });
+
+  // 3) Update passwordChangedAt property for the user
+  // 4) Log the user in, send JWT
+  createSendToken(user, 201, req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -68,10 +132,19 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 2) Check if user exist && password is correct
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({
+    email
+  }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorect email or password', 401));
+  }
+
+  // 3) Check user confirmed email or not
+  if (!user.emailConfirmed) {
+    return next(
+      new AppError('Email not confirmed. Please confirm your email.', 403)
+    );
   }
 
   // 3) if everything okay, send token to client
@@ -239,4 +312,77 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 4) Log user in, send JWT
   createSendToken(user, 201, req, res);
+});
+
+exports.googleAuthSignup = catchAsync(async (req, res, next) => {
+  if (req.body.token) {
+    const user = await verify(req.body.token).catch(() => {
+      return next(new AppError('Token is invalid or has expired', 401));
+    });
+
+    req.body.name = user.name;
+    req.body.email = user.email;
+    req.body.password =
+      user.sub + user.jti + process.env.GOOGLE_SECRET_PASSWORD;
+    req.body.passwordConfirm =
+      user.sub + user.jti + process.env.GOOGLE_SECRET_PASSWORD;
+    req.body.emailConfirmed = true;
+    req.body.photo = user.picture;
+
+    const newUser = await User.create(req.body);
+
+    const url = `${req.protocol}://${req.get('host')}/me`;
+    await new Email(newUser, url).sendWelcome();
+
+    newUser.password = undefined;
+    newUser.emailConfirmed = undefined;
+    newUser.role = undefined;
+
+    // TODO UPDATE OPTIONs
+    res.cookie('jwt', { token: req.body.token });
+    // createSendToken(newUser, 201, req, res);
+    res.status(201).json({
+      status: 'success',
+      token: req.body.token,
+      data: {
+        user: newUser
+      }
+    });
+  }
+
+  next();
+});
+
+exports.googleAuthLogin = catchAsync(async (req, res, next) => {
+  if (req.body.token) {
+    const user = await verify(req.body.token).catch(() => {
+      return next(new AppError('Token is invalid or has expired', 401));
+    });
+
+    req.body.email = user.email;
+    req.body.password =
+      user.sub + user.jti + process.env.GOOGLE_SECRET_PASSWORD;
+
+    // 2) Check if user exist && password is correct
+    const userDB = await User.findOne({
+      email: user.email
+    }).select('+password');
+
+    userDB.password = undefined;
+
+    // TODO UPDATE OPTIONs
+    res.cookie('jwt', {
+      token: req.body.token
+    });
+    // createSendToken(newUser, 201, req, res);
+    res.status(201).json({
+      status: 'success',
+      token: req.body.token,
+      data: {
+        user: userDB
+      }
+    });
+  }
+
+  next();
 });

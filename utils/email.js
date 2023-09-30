@@ -75,6 +75,13 @@ module.exports = class Email {
     await this.send('welcome', 'Welcome to GPT news generator!');
   }
 
+  async sendEmailConfirm() {
+    await this.send(
+      'emailConfirm',
+      'Confirm your email at GPT news generator!'
+    );
+  }
+
   async sendPasswordReset() {
     await this.send(
       'passwordReset',

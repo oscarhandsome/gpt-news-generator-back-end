@@ -102,7 +102,12 @@ const newsSchema = new mongoose.Schema(
     }
   },
   {
-    toJSON: { virtuals: true },
+    toJSON: {
+      virtuals: true,
+      transform: function(doc, ret) {
+        delete ret._id; // return Id instead _id
+      }
+    },
     toObject: { virtuals: true }
   }
 );

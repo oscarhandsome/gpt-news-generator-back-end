@@ -1,0 +1,16 @@
+extends baseEmail
+
+block content 
+    p Hi #{firstName},
+        p This is an account confirmation link for GPTChatNewsGenerator. If you did not register for a free account with GPTChatNewsGenerator, let us know immediately (support@gpt-chat-news-generator.com). We will make sure you don't receive any more emails, and cancel the account.
+        //- p Click here to finish registration #{url}
+        table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+                tr
+                    td(align='left')
+                        table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+                            tbody
+                                tr
+                                    td
+                                        a(href=`${url}`, target='_blank') Confirm your email
+        p Visit the following link to confirm your email address and start using GPTChatNewsGenerator.
