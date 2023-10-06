@@ -17,10 +17,13 @@ const handleDuplicateFieldsDB = err => {
 };
 
 const handleValidationErrorDB = err => {
-  const errors = Object.values(err.errors).map(el => el.message);
+  const errors = Object.values(err.errors).map(el => ({
+    [el.properties.path]: el.message
+  }));
 
-  const message = `Invalid input data. ${errors.join('. ')}`;
-  return new AppError(message, 400);
+  // const message = `Invalid input data. ${errors.join('. ')}`;
+  const message = `Invalid input data.`;
+  return new AppError(message, 400, errors);
 };
 
 const handleJWTError = () =>
@@ -57,7 +60,8 @@ const sendErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
-      message: err.message
+      message: err.message,
+      errors: err.errors
     });
 
     // Programming or other unknow error: don't leack error details
