@@ -143,7 +143,10 @@ exports.login = catchAsync(async (req, res, next) => {
   // 3) Check user confirmed email or not
   if (!user.emailConfirmed) {
     return next(
-      new AppError('Email not confirmed. Please confirm your email.', 403)
+      new AppError(
+        'Email not confirmed. Please check your email and confirm.',
+        403
+      )
     );
   }
 
