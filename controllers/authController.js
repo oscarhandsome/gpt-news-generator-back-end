@@ -144,6 +144,8 @@ exports.login = catchAsync(async (req, res, next) => {
     email
   }).select('+password');
 
+  console.log('email', email);
+
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorect email or password', 401));
   }
