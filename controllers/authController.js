@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 
 const User = require('./../models/userModel');
+const Booking = require('./../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('./../utils/appError');
 // const sendEmail = require('./../utils/email');
@@ -82,6 +83,13 @@ exports.signup = catchAsync(async (req, res, next) => {
   )}/auth/email-confirm/${emailConfirmToken}`;
   await new Email(newUser, url).sendEmailConfirm();
 
+  // CREATE BOOKING FOR FREE ACCOUNT
+  await Booking.create({
+    subscription: '65070c8f204ce39eafabc8eb',
+    user: newUser,
+    price: 0
+  });
+
   // createSendToken(newUser, 201, req, res);
   res.status(200).json({
     status: 'success',
@@ -91,7 +99,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 // STEP 2 CONFIRM EMAIL AFTER REGISTRATION
 exports.emailConfirm = catchAsync(async (req, res, next) => {
-  console.log('req.params', req.params);
+  // console.log('req.params', req.params);
   // 1) Get user based on user token
   const hashedToken = crypto
     .createHash('sha256')
