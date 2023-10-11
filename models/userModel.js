@@ -76,10 +76,11 @@ const userSchema = new mongoose.Schema(
       virtuals: true,
       transform: function(doc, ret) {
         delete ret._id; // return Id instead _id
+        delete ret.__v;
       }
     },
-    toObject: { virtuals: true },
-    versionKey: false
+    toObject: { virtuals: true }
+    // versionKey: false
   }
 );
 
