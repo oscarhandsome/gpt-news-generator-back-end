@@ -160,6 +160,8 @@ exports.login = catchAsync(async (req, res, next) => {
     );
   }
 
+  console.log('user2', user);
+
   // 3) if everything okay, send token to client
   createSendToken(user, 201, req, res);
 });
