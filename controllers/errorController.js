@@ -107,8 +107,6 @@ module.exports = (err, req, res, next) => {
       name: err.name
     };
 
-    console.log('production error', error);
-
     if (error.name === 'CastError') error = handleCastErrorDB(error); // error.kind === "ObjectID"
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error._message && error._message.includes('validation'))

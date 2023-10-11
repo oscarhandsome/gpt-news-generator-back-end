@@ -144,23 +144,19 @@ exports.login = catchAsync(async (req, res, next) => {
     email
   }).select('+password');
 
-  console.log('user', user);
-
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorect email or password', 401));
   }
 
   // 3) Check user confirmed email or not
-  if (!user.emailConfirmed) {
-    return next(
-      new AppError(
-        'Email not confirmed. Please check your email and confirm.',
-        403
-      )
-    );
-  }
-
-  console.log('user2', user);
+  // if (!user.emailConfirmed) {
+  //   return next(
+  //     new AppError(
+  //       'Email not confirmed. Please check your email and confirm.',
+  //       403
+  //     )
+  //   );
+  // }
 
   // 3) if everything okay, send token to client
   createSendToken(user, 201, req, res);
