@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
       default: false
     },
     emailConfirmTokenExpires: Date,
-    photo: { type: String, default: 'https://i.pravatar.cc/100' },
+    photo: { type: String, default: 'user-placeholder.png' },
     position: { type: String, default: 'Correspondent' },
     role: {
       type: String,
