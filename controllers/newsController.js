@@ -122,6 +122,7 @@ exports.aliasBestNews = async (req, res, next) => {
 exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   // TODO move requests here
   const {
+    name,
     type,
     famousPerson,
     place,
@@ -134,7 +135,7 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   const openaiResponse = await openai.chat([
     {
       role: openai.roles.ASSISTANT,
-      content: `Generate ${type} news with ${famousPerson} at ${place} place with maximal length ${newsLength} words`
+      content: `Generate ${type} news with ${famousPerson} at ${place} place with maximal length ${newsLength} words based on this title: ${name}`
     }
   ]);
 
