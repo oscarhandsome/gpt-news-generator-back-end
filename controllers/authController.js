@@ -350,16 +350,23 @@ exports.googleAuthSignup = catchAsync(async (req, res, next) => {
     newUser.emailConfirmed = undefined;
     newUser.role = undefined;
 
-    // TODO UPDATE OPTIONs
-    res.cookie('jwt', { token: req.body.token });
-    // createSendToken(newUser, 201, req, res);
-    res.status(201).json({
-      status: 'success',
-      token: req.body.token,
-      data: {
-        user: newUser
-      }
+    // CREATE BOOKING FOR FREE ACCOUNT
+    await Booking.create({
+      subscription: '65070c8f204ce39eafabc8eb',
+      user: newUser,
+      price: 0
     });
+
+    // TODO UPDATE OPTIONs
+    // res.cookie('jwt', { token: req.body.token });
+    createSendToken(newUser, 201, req, res);
+    // res.status(201).json({
+    //   status: 'success',
+    //   token: req.body.token,
+    //   data: {
+    //     user: newUser
+    //   }
+    // });
 
     return;
   }
@@ -382,20 +389,24 @@ exports.googleAuthLogin = catchAsync(async (req, res, next) => {
       email: user.email
     }).select('+password');
 
-    userDB.password = undefined;
+    if (!userDB) {
+      return next(new AppError('There is no user with this credentials', 404));
+    }
+
+    // userDB.password = undefined;
 
     // TODO UPDATE OPTIONs
-    res.cookie('jwt', {
-      token: req.body.token
-    });
-    // createSendToken(newUser, 201, req, res);
-    res.status(201).json({
-      status: 'success',
-      token: req.body.token,
-      data: {
-        user: userDB
-      }
-    });
+    // res.cookie('jwt', {
+    //   token: req.body.token
+    // });
+    createSendToken(userDB, 201, req, res);
+    // res.status(201).json({
+    //   status: 'success',
+    //   token: req.body.token,
+    //   data: {
+    //     user: userDB
+    //   }
+    // });
     return;
   }
 
