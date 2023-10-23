@@ -129,7 +129,8 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     newsLength,
     imageModelId,
     promptStrength,
-    steps
+    steps,
+    imageCount
   } = req.body;
   // const prompt = `Imagine 3 random words corresponding to these points: famous man or women name and surname, some place name on a earth or some popular event, any verb for a action`;
   const openaiResponse = await openai.chat([
@@ -157,7 +158,7 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     // negativePrompt: 'blurry, low quality',
     negativePrompt:
       '(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck',
-    numberOfImages: 1,
+    numberOfImages: imageCount,
     width: 512,
     height: 512,
     steps: Number(steps),
@@ -171,7 +172,9 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     // Print the first image's uri
     // console.log(data.images[0].uri);
     req.body.imageCover = data.images[0].uri;
-    // req.body.images = data.images.map(img => img.uri);
+    if (data.images && data.images.length) {
+      req.body.images = data.images.map(img => img.uri);
+    }
   }
 
   next();
