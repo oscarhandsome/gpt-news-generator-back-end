@@ -9,11 +9,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please tell us your name'],
       // unique: false,
-      trim: true,
-      match: [
-        new RegExp(/^[a-zA-Z\s]+$/),
-        '{VALUE} is not valid. Please use only letters'
-      ]
+      trim: true
+      // match: [
+      //   new RegExp(/^[a-zA-Z\s]+$/),
+      //   '{VALUE} is not valid. Please use only letters'
+      // ]
     },
     email: {
       type: String,
