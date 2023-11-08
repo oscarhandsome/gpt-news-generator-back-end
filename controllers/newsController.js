@@ -194,7 +194,7 @@ exports.checkSubscriptionAcceess = catchAsync(async (req, res, next) => {
   });
   if (!subscriptions.length)
     return next(new AppError('Subscription not exist!', 402));
-  if (subscriptions[0].allowedRequests < news.length)
+  if (subscriptions[0].allowedRequests <= news.length)
     return next(new AppError('Quantity of allowed requests is over', 402));
   if (bookings[0].expiresAt < Date.now())
     return next(new AppError('Subsription is over', 402));
