@@ -30,9 +30,20 @@ const commentSchema = new mongoose.Schema(
       required: [true, 'Comment must belong to a user.']
     }
   },
+  // {
+  //   toJSON: { virtuals: true },
+  //   toObject: { virtuals: true }
+  // },
   {
-    toJSON: { virtuals: true },
+    toJSON: {
+      virtuals: true,
+      transform: function(doc, ret) {
+        delete ret._id; // return Id instead _id
+        delete ret.__v;
+      }
+    },
     toObject: { virtuals: true }
+    // versionKey: false
   }
 );
 
@@ -48,7 +59,7 @@ commentSchema.pre(/^find/, function(next) {
   //   select: 'name photo'
   // });
   this.populate({
-    path: 'autor',
+    path: 'user',
     select: 'name photo'
   });
   next();
