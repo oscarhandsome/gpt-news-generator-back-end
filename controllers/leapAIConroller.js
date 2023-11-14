@@ -2,19 +2,8 @@
 const { Leap } = require('@leap-ai/sdk');
 
 class LeapAI {
-  //   roles = {
-  //     ASSISTANT: 'assistant',
-  //     USER: 'user',
-  //     SYSTEM: 'system'
-  //   };
-
   constructor(apiKey) {
-    const configuration = new Configuration({
-      // organization: 'org-ZuzWlL9kYtY3oiRhY9pqm0Li',
-      // apiKey: process.env.OPENAI_API_KEY,
-      apiKey
-    });
-    this.openai = new OpenAIApi(configuration);
+    this.openai = new Leap(apiKey);
   }
 
   //   async chat(messages) {

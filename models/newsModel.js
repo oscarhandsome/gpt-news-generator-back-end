@@ -9,7 +9,7 @@ const newsSchema = new mongoose.Schema(
       required: [true, 'News must have name'],
       unique: false,
       trim: true,
-      maxlength: [100, 'News name must have less or equal 100 characters'],
+      maxlength: [200, 'News name must have less or equal 200 characters'],
       minlength: [10, 'News name must have more or equal 10 characters']
     },
     slug: String,

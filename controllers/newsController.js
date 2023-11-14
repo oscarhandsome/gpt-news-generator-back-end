@@ -143,21 +143,13 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   req.body.description = openaiResponse.content;
 
   // Generate Image
-  // const result = await leapai.generate.generateImage({
-  //   prompt: `${req.body[0].name}`
-  // });
   const { data, error } = await leapai.generate.generateImage({
-    // modelId: 'eab32df0-de26-4b83-a908-a83f3015e971',
     modelId: imageModelId,
-    // prompt: `8k portrait of an ${famousPerson} as a jedi, star wars revenge of the sith movie scene style, studio photography, volumetric lighting, smiling, realistic, 35mm, expressive, iconic, 8k concept art, photorealistic, high detail`,
-    // prompt: `8k portrait of a classic scene from a ${famousPerson} at ${place} featuring a gunslinger in a dusty desert town, high noon, sun directly overhead, photorealistic, highly detailed`
-    prompt: `8k portrait of an enchanting, highly detailed, photorealistic, image of a ${
+    prompt: `8k portrait of ${famousPerson} in a ${place}, photo-realistic, full face details, cinematic lighting, hyper realistic facial features, modern outfit, ultra detailed, related to ${
       openaiResponse.content
-    } in a magical ${place}, surrounded by sparkling lights and vibrant flora, captured in soft, dreamy lighting`,
-    // prompt: response.content,
-    // negativePrompt: 'blurry, low quality',
+    }, canon eos 5d, 100mm f/1.8, iso100`,
     negativePrompt:
-      '(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck',
+      '(deformed iris, deformed pupils, semi-realistic, CGI, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artefacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck',
     numberOfImages: imageCount,
     width: 512,
     height: 512,
