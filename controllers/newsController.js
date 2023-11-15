@@ -143,7 +143,7 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   req.body.description = openaiResponse.content;
 
   // Generate Image
-  const { data, error } = await leapai.generate.generateImage({
+  const { data, error } = await leapai.generateImage({
     modelId: imageModelId,
     prompt: `8k portrait of ${famousPerson} in a ${place}, photo-realistic, full face details, cinematic lighting, hyper realistic facial features, modern outfit, ultra detailed, related to ${
       openaiResponse.content
@@ -154,8 +154,8 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     width: 512,
     height: 512,
     steps: Number(steps),
-    promptStrength: Number(promptStrength),
-    seed: 4523184
+    promptStrength: Number(promptStrength)
+    // seed: 4523184
   });
 
   if (error) return next(new AppError(error.message, error.statusCode));
