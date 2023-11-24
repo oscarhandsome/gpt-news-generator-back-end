@@ -17,6 +17,7 @@ const commentRouter = require('./routes/commentRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 const bookingController = require('./controllers/bookingController');
 const subscriptionRouter = require('./routes/subscriptionRoutes');
+const newsletterRouter = require('./routes/newsletterRoutes');
 
 const app = express();
 
@@ -106,6 +107,7 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/bookings', bookingRouter);
 app.use('/api/v1/subscriptions', subscriptionRouter);
+app.use('/api/v1/newsletters', newsletterRouter);
 
 app.all('*', (req, res, next) => {
   // res.status(404).json({
