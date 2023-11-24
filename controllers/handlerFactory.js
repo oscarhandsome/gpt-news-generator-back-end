@@ -35,9 +35,13 @@ exports.updateOne = Model =>
     });
   });
 
-exports.createOne = Model =>
+exports.createOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.create(req.body);
+    let query = Model.create(req.body);
+    if (popOptions)
+      query = query.then(t => t.populate(popOptions).execPopulate());
+    const doc = await query;
+    // const doc = await Model.create(req.body);
 
     res.status(202).json({
       status: 'success',
