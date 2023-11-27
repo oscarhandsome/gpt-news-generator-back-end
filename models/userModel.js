@@ -166,7 +166,8 @@ userSchema.methods.createEmailConfirmToken = function() {
     .digest('hex');
 
   this.emailConfirmTokenExpires =
-    Date.now() + process.env.EMAIL_CONFIRM_TOKEN_EXPIRES_IN * 60 * 10000;
+    Date.now() +
+    process.env.EMAIL_CONFIRM_TOKEN_EXPIRES_IN * 24 * 60 * 60 * 1000;
 
   return emailConfirmToken;
 };
