@@ -65,12 +65,12 @@ const newsSchema = new mongoose.Schema(
       required: [true, 'A news must have a cover image']
     },
     images: [String],
-    public: {
+    isPublic: {
       type: Boolean,
       default: true,
       required: [true, 'Publich checkbox should be selected']
     },
-    active: {
+    isActive: {
       type: Boolean,
       default: true,
       required: [true, 'Active checkbox should be selected']
