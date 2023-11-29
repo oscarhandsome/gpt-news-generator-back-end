@@ -78,9 +78,10 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   // const url = `${req.protocol}://${req.get('host')}/me`;
   // await new Email(newUser, url).sendWelcome();
-  const url = `${req.protocol}://${req.get(
-    'host'
-  )}/auth/email-confirm/${emailConfirmToken}`;
+  // const url = `${req.protocol}://${req.get(
+  //   'host'
+  // )}/auth/email-confirm/${emailConfirmToken}`;
+  const url = `${process.env.DOMAIN}/auth/email-confirm/${emailConfirmToken}`;
   await new Email(newUser, url).sendEmailConfirm();
 
   // CREATE BOOKING FOR FREE ACCOUNT
@@ -346,7 +347,7 @@ exports.googleAuthSignup = catchAsync(async (req, res, next) => {
     const newUser = await User.create(req.body);
 
     // const url = `${req.protocol}://${req.get('host')}/me`;
-    const url = `https://gpt-chat-news-generator.netlify.app/me`;
+    const url = `${process.env.DOMAIN}/me`;
     await new Email(newUser, url).sendWelcome();
 
     newUser.password = undefined;
