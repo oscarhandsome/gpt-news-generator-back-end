@@ -198,9 +198,11 @@ exports.checkSubscriptionAcceess = catchAsync(async (req, res, next) => {
 });
 
 exports.createNews = catchAsync(async (req, res, next) => {
+  console.log('createNews - start');
   // add into db
   const newNews = await News.create(req.body);
 
+  console.log('createNews - end send result');
   res.status(202).json({
     status: 'success',
     data: {
