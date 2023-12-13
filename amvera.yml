@@ -1,0 +1,12 @@
+meta:
+  environment: node
+  toolchain:
+    name: npm
+    version: 16
+build:
+  artifacts:
+    '*': /
+run:
+  scriptName: app.js
+  persistenceMount: /data
+  containerPort: 80
