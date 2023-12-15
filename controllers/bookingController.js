@@ -20,7 +20,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     //   'host'
     // )}/subscriptions/my-subsriptions`,
     success_url: `${process.env.DOMAIN}/subscriptions/my-subsriptions`,
-    cancel_url: `${req.protocol}://${req.get('host')}/subscriptions`,
+    // cancel_url: `${req.protocol}://${req.get('host')}/subscriptions`,
+    cancel_url: `${process.env.DOMAIN}/subscriptions`,
     customer_email: req.user.email,
     client_reference_id: req.params.subscriptionId,
     line_items: [
