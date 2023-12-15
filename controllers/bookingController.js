@@ -19,7 +19,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     // success_url: `${req.protocol}://${req.get(
     //   'host'
     // )}/subscriptions/my-subsriptions`,
-    success_url: `https://gpt-chat-news-generator.netlify.app/subscriptions/my-subsriptions`,
+    success_url: `${process.env.DOMAIN}/subscriptions/my-subsriptions`,
     cancel_url: `${req.protocol}://${req.get('host')}/subscriptions`,
     customer_email: req.user.email,
     client_reference_id: req.params.subscriptionId,
