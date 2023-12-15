@@ -329,7 +329,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 201, req, res);
 });
 
-exports.googleAuthSignup = catchAsync(async (req, res, next) => {
+exports.googleAuthSignUp = catchAsync(async (req, res, next) => {
   if (req.body.token) {
     const user = await verify(req.body.token).catch(() => {
       return next(new AppError('Token is invalid or has expired', 401));
