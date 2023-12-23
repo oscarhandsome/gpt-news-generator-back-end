@@ -106,6 +106,7 @@ const newsSchema = new mongoose.Schema(
       virtuals: true,
       transform: function(doc, ret) {
         delete ret._id; // return Id instead _id
+        delete ret.__v;
       }
     },
     toObject: { virtuals: true }
@@ -178,7 +179,7 @@ newsSchema.post(/^find/, function(docs, next) {
 });
 
 // AGGREGATION MIDDLWARE
-newsSchema.post('aggregate', function name(next) {
+newsSchema.post('aggregate', function(next) {
   this.pipeline().unshift({
     $match: { secretNews: { $ne: true } }
   });

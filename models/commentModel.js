@@ -19,6 +19,10 @@ const commentSchema = new mongoose.Schema(
       type: Date,
       default: Date.now
     },
+    updatedAt: {
+      type: Date,
+      default: Date.now
+    },
     news: {
       type: mongoose.Schema.ObjectId,
       ref: 'News',
