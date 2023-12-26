@@ -3,6 +3,11 @@ const News = require('./newsModel');
 
 const commentSchema = new mongoose.Schema(
   {
+    // parentId: {
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: 'Comment'
+    // },
+    // comments: Array,
     comment: {
       type: String,
       required: [true, 'Comment can not be empty'],
@@ -55,13 +60,7 @@ const commentSchema = new mongoose.Schema(
 commentSchema.index({ news: 1, user: 1 }, { unique: true });
 
 commentSchema.pre(/^find/, function(next) {
-  // this.populate({
-  //   path: 'news',
-  //   select: 'name'
-  // }).populate({
-  //   path: 'autor',
-  //   select: 'name photo'
-  // });
+  // this.populate({ path: 'news', select: 'name'}).populate({ path: 'autor', select: 'name photo' });
   this.populate({
     path: 'user',
     select: 'name photo'
