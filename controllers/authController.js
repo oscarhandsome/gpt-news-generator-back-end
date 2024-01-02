@@ -418,5 +418,9 @@ exports.googleAuthLogin = catchAsync(async (req, res, next) => {
     return;
   }
 
+  if (!req.body.token) {
+    return next(new AppError('Token is invalid or has expired', 401));
+  }
+
   next();
 });
