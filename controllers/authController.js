@@ -384,7 +384,9 @@ exports.googleAuthLogin = catchAsync(async (req, res, next) => {
       return next(new AppError('Token is invalid or has expired', 401));
     });
 
-    console.log('googleAuthLogin', user);
+    if (!user) {
+      return next(new AppError('There is no user with this credentials', 404));
+    }
 
     req.body.email = user.email;
     req.body.password =
