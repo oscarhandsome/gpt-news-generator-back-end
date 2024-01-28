@@ -23,6 +23,9 @@ const newsSchema = new mongoose.Schema(
           'Type is either: funny, sadly, fantastic, dangerously or sensational'
       }
     },
+    category: {
+      type: String
+    },
     famousPerson: {
       type: String,
       default: 'Some famous paerson',
