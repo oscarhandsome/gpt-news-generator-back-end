@@ -158,7 +158,10 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     // seed: 4523184
   });
 
-  if (error) return next(new AppError(error.message, error.statusCode));
+  if (error) {
+    console.error('generateOpenAiLeapAi', error);
+    return next(new AppError(error.message, error.statusCode));
+  }
   if (data) {
     console.log(data);
     // Print the first image's uri
@@ -184,8 +187,6 @@ exports.checkSubscriptionAcceess = catchAsync(async (req, res, next) => {
   const subscriptions = await Subscription.find({
     _id: { $in: subscriptionIds }
   });
-  console.log('subscriptions', subscriptions);
-  console.log('bookings', bookings);
   if (!subscriptions.length)
     return next(new AppError('Subscription not exist!', 402));
   if (subscriptions[0].allowedRequests <= news.length)
