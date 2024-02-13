@@ -140,8 +140,6 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     }
   ]);
 
-  console.log('openaiResponse', openaiResponse);
-
   req.body.description = openaiResponse.content;
 
   // Generate Image
@@ -160,10 +158,7 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     // seed: 4523184
   });
 
-  if (error) {
-    console.error('generateOpenAiLeapAi', error);
-    return next(new AppError(error.message, error.statusCode));
-  }
+  if (error) return next(new AppError(error.message, error.statusCode));
   if (data) {
     console.log(data);
     // Print the first image's uri
