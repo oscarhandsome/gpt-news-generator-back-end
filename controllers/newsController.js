@@ -140,6 +140,8 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     }
   ]);
 
+  console.log('openaiResponse', openaiResponse);
+
   req.body.description = openaiResponse.content;
 
   // Generate Image
