@@ -66,4 +66,13 @@ router
     newsController.deleteNews
   );
 
+router
+  .route('/:id/getImageResuts/:workflowRunId')
+  .get(
+    authController.protect,
+    authController.restrictTo('user'),
+    newsController.getResultsLeapAi,
+    newsController.updateNews
+  );
+
 module.exports = router;

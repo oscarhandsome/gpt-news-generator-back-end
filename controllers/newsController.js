@@ -127,7 +127,7 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     famousPerson,
     place,
     newsLength,
-    imageModelId,
+    // imageModelId,
     promptStrength,
     steps,
     imageCount
@@ -143,8 +143,8 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   req.body.description = openaiResponse.content;
 
   // Generate Image
-  const { data, error } = await leapai.generateImage({
-    modelId: imageModelId,
+  const response = await leapai.generateImage({
+    // modelId: imageModelId,
     prompt: `8k portrait of ${famousPerson} in a ${place}, photo-realistic, full face details, cinematic lighting, hyper realistic facial features, modern outfit, ultra detailed, related to ${
       openaiResponse.content
     }, canon eos 5d, 100mm f/1.8, iso100`,
@@ -158,14 +158,29 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     // seed: 4523184
   });
 
+  if (response) req.body.workflowRunId = response.id;
+  // if (error) return next(new AppError(error.message, error.statusCode));
+  // if (data) {
+  //   console.log('Generate Image start end - data: ', data);
+  //   // Print the first image's uri
+  //   // console.log(data.images[0].uri);
+  //   // req.body.imageCover = data.images[0].uri;
+  //   // if (data.images && data.images.length) {
+  //   //   req.body.images = data.images.map(img => img.uri);
+  //   // }
+  // }
+
+  next();
+});
+
+exports.getResultsLeapAi = catchAsync(async (req, res, next) => {
+  const { data, error } = await leapai.checkResults(req.params.workflowRunId);
+
   if (error) return next(new AppError(error.message, error.statusCode));
-  if (data) {
-    console.log(data);
-    // Print the first image's uri
-    // console.log(data.images[0].uri);
-    req.body.imageCover = data.images[0].uri;
-    if (data.images && data.images.length) {
-      req.body.images = data.images.map(img => img.uri);
+  if (data && data.output) {
+    req.body.imageCover = data.output.images[0];
+    if (data.output.images && data.output.images.length) {
+      req.body.images = data.output.images.map(img => img);
     }
   }
 

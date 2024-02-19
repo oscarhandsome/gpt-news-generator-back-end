@@ -24,7 +24,28 @@ const newsSchema = new mongoose.Schema(
       }
     },
     category: {
-      type: String
+      type: String,
+      default: 'Other',
+      enum: {
+        values: [
+          'Politics',
+          'World News',
+          'Business and Finance',
+          'Technology',
+          'Science',
+          'Health',
+          'Entertainment',
+          'Sports',
+          'Environment',
+          'Human Interest',
+          'Education',
+          'Crime and Justice',
+          'Lifestyle',
+          'Opinion and Editorial',
+          'Weather',
+          'Other'
+        ]
+      }
     },
     famousPerson: {
       type: String,
@@ -70,12 +91,12 @@ const newsSchema = new mongoose.Schema(
     images: [String],
     isPublic: {
       type: Boolean,
-      default: true,
+      default: false,
       required: [true, 'Publich checkbox should be selected']
     },
     isActive: {
       type: Boolean,
-      default: true,
+      default: false,
       required: [true, 'Active checkbox should be selected']
     },
     createdAt: {
@@ -102,6 +123,9 @@ const newsSchema = new mongoose.Schema(
     secretNews: {
       type: Boolean,
       default: false
+    },
+    workflowRunId: {
+      type: Number
     }
   },
   {
@@ -157,7 +181,11 @@ newsSchema.pre('save', function(next) {
 // QUERY MIDDLAWARE
 // newsSchema.post('find', function (doc, next) {
 newsSchema.pre(/^find/, function(next) {
-  this.find({ secretNews: { $ne: true } });
+  this.find({
+    secretNews: { $ne: true },
+    isPublic: { $ne: false },
+    isActive: { $ne: false }
+  });
 
   this.start = Date.now();
   next();
