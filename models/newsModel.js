@@ -125,7 +125,7 @@ const newsSchema = new mongoose.Schema(
       default: false
     },
     workflowRunId: {
-      type: Number
+      type: String
     }
   },
   {

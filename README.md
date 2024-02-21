@@ -1,6 +1,6 @@
 # GPT News Generator
 
-Project will be soon here - [news-generator](https://news-generator.com).
+DEMO - [news-generator](https://bit.ly/3RJeANj).
 
 Project-based on Chat GPT AI and Leap AI image generator. The idea is to connect everything and create news automatically. Enjoy!
 
