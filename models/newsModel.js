@@ -182,11 +182,10 @@ newsSchema.pre('save', function(next) {
 // newsSchema.post('find', function (doc, next) {
 newsSchema.pre(/^find/, function(next) {
   this.find({
-    secretNews: { $ne: true },
-    isPublic: { $ne: false },
-    isActive: { $ne: false }
+    secretNews: { $ne: true }
+    // isPublic: { $ne: false },
+    // isActive: { $ne: false }
   });
-
   this.start = Date.now();
   next();
 });

@@ -55,7 +55,7 @@ router
   .get(newsController.getNews)
   .patch(
     authController.protect,
-    authController.restrictTo('admin', 'manager'),
+    authController.restrictTo('admin', 'user'),
     newsController.uploadNewsImages,
     newsController.resizeNewsImages,
     newsController.updateNews
