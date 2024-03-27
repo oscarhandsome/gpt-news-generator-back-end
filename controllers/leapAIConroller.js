@@ -7,8 +7,24 @@ class LeapAI {
     this.leapai = new Leap({ apiKey });
   }
 
+  async generateNews({ message }) {
+    try {
+      const response = await this.leapai.workflowRuns.workflow({
+        workflow_id: 'wkf_WAD7JNzwM3tysf',
+        input: {
+          input_message: message
+        }
+      });
+      console.log('response', response);
+      return response.data;
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+
   async generateImage({
     // modelId = '37d42ae9-5f5f-4399-b60b-014d35e762a5', // Realistic Vision v4.0 - default
+    newsPrompt,
     prompt,
     negativePrompt = '(deformed iris, deformed pupils, semi-realistic, CGI, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artefacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck',
     numberOfImages = 1,
@@ -22,6 +38,7 @@ class LeapAI {
       const response = await this.leapai.workflowRuns.workflow({
         workflow_id: 'wkf_KXgZMMJwH6ivZo',
         input: {
+          news_prompt: newsPrompt,
           width,
           height,
           // modelId,
@@ -36,6 +53,7 @@ class LeapAI {
       return response.data;
     } catch (error) {
       console.error('Error while LEAP AI Generated Image', error.message);
+      console.error('error', error);
       return error;
     }
   }

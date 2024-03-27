@@ -157,7 +157,10 @@ newsSchema.virtual('comments', {
 
 // DOCUMENt MIDDLWARE: runs before .save() and .create()
 newsSchema.pre('save', function(next) {
-  this.slug = slugify(this.name, { lower: true });
+  this.slug = slugify(this.name, {
+    lower: true,
+    remove: /[*+~.,;()'"!:#$@%^*()|/><`]/g
+  });
   next();
 });
 

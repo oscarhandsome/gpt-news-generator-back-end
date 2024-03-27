@@ -5,7 +5,7 @@ const News = require('./../models/newsModel');
 const Booking = require('./../models/bookingModel');
 const Subscription = require('./../models/subscriptionModel');
 // const APIFeatures = require('../utils/apiFeatures');
-const openai = require('../controllers/openAIController');
+// const openai = require('../controllers/openAIController');
 const leapai = require('../controllers/leapAIConroller');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -133,21 +133,29 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
     imageCount
   } = req.body;
   // const prompt = `Imagine 3 random words corresponding to these points: famous man or women name and surname, some place name on a earth or some popular event, any verb for a action`;
-  const openaiResponse = await openai.chat([
-    {
-      role: openai.roles.ASSISTANT,
-      content: `Generate ${type} news with ${famousPerson} at ${place} place with maximal length ${newsLength} words based on this title: ${name}`
-    }
-  ]);
+  // const openaiResponse = await openai.chat([
+  //   {
+  //     role: openai.roles.ASSISTANT,
+  //     content: `Generate ${type} news with ${famousPerson} at ${place} place with maximal length ${newsLength} words based on this title: ${name}`
+  //   }
+  // ]);
 
-  req.body.description = openaiResponse.content;
+  // console.log('openaiResponse', openaiResponse);
+
+  // req.body.description = openaiResponse.content;
+
+  const newsPrompt = `Generate ${type} news with ${famousPerson} at ${place} place with maximal length ${newsLength} words based on this title: ${name}`;
+
+  // const responseNews = await leapai.generateNews({
+  //   message: newsPrompt
+  // });
+  // console.log('responseNews', responseNews);
 
   // Generate Image
   const response = await leapai.generateImage({
     // modelId: imageModelId,
-    prompt: `8k portrait of ${famousPerson} in a ${place}, photo-realistic, full face details, cinematic lighting, hyper realistic facial features, modern outfit, ultra detailed, related to ${
-      openaiResponse.content
-    }, canon eos 5d, 100mm f/1.8, iso100`,
+    newsPrompt,
+    prompt: `8k portrait of ${famousPerson} in a ${place}, photo-realistic, full face details, cinematic lighting, hyper realistic facial features, modern outfit, ultra detailed,, canon eos 5d, 100mm f/1.8, iso100 related to `,
     negativePrompt:
       '(deformed iris, deformed pupils, semi-realistic, CGI, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artefacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck',
     numberOfImages: imageCount,
@@ -181,6 +189,10 @@ exports.getResultsLeapAi = catchAsync(async (req, res, next) => {
     req.body.imageCover = data.output.images[0];
     if (data.output.images && data.output.images.length) {
       req.body.images = data.output.images.map(img => img);
+    }
+
+    if (data.output.description) {
+      req.body.description = data.output.description;
     }
   }
 

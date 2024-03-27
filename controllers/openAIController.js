@@ -19,7 +19,6 @@ class OpenAI {
   }
 
   async chat(messages) {
-    console.log('messages', messages);
     try {
       const response = await this.openai.createChatCompletion({
         model: 'gpt-3.5-turbo',
@@ -27,7 +26,7 @@ class OpenAI {
       });
       return response.data.choices[0].message;
     } catch (error) {
-      console.log('Error while gpt chat', error.message);
+      console.error('Error while OpenAIApi', error.message);
     }
   }
 
