@@ -159,7 +159,7 @@ newsSchema.virtual('comments', {
 newsSchema.pre('save', function(next) {
   this.slug = slugify(this.name, {
     lower: true,
-    remove: /[*+~.,;()'"!:#$@%^*()|/><`]/g
+    remove: /[?*+~.,;()'"!:#$@%^*()|/><`]/g
   });
   next();
 });
