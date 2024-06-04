@@ -276,7 +276,7 @@ exports.createNews = catchAsync(async (req, res, next) => {
 
 exports.getAllNews = factory.getAll(News);
 // exports.getNews = factory.getOne(News, {
-exports.getNews = factory.getOneBySlug(News, {
+exports.getOneNewsBySlug = factory.getOneBySlug(News, {
   path: 'comments',
   select: '-__v -passwordChangedAt'
 });

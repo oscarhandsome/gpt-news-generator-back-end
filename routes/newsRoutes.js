@@ -50,9 +50,10 @@ router
     newsController.generateOpenAiLeapAi,
     newsController.createNews
   );
+router.route('/:slug').get(newsController.getOneNewsBySlug); // renamed getNews to getOneNewsBySlug
 router
-  .route('/:slug')
-  .get(newsController.getNews)
+  .route('/:id') // switch back from slug to id
+  // .get(newsController.getNews) // separated(moved up) GET method from PATCH and DELETE to be able catch id
   .patch(
     authController.protect,
     authController.restrictTo('admin', 'user'),
