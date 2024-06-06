@@ -181,6 +181,16 @@ exports.generateOpenAiLeapAi = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.generateNewLeapAiImages = catchAsync(async (req, res, next) => {
+  const { prompt } = req.body;
+  const response = await leapai.generateNewImage({
+    prompt
+  });
+  if (response) req.body.workflowRunId = response.id;
+
+  next();
+});
+
 exports.getResultsLeapAi = catchAsync(async (req, res, next) => {
   const { data, error } = await leapai.checkResults(req.params.workflowRunId);
 

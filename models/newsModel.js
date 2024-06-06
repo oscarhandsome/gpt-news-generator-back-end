@@ -85,8 +85,8 @@ const newsSchema = new mongoose.Schema(
     ],
     imageCover: {
       type: String,
-      default: 'default.jpg',
-      required: [true, 'A news must have a cover image']
+      default: 'default.jpg'
+      // required: [true, 'A news must have a cover image']
     },
     images: [String],
     isPublic: {

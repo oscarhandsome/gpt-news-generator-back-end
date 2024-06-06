@@ -1,6 +1,7 @@
 // import { Leap } from '@leap-ai/sdk';
 // const { Leap } = require('@leap-ai/sdk');
 const { Leap } = require('@leap-ai/workflows');
+const AppError = require('../utils/appError');
 
 class LeapAI {
   constructor(apiKey) {
@@ -18,7 +19,8 @@ class LeapAI {
       console.log('response', response);
       return response.data;
     } catch (error) {
-      console.log('error', error);
+      console.error('error', error);
+      throw new AppError(error.message, error.status);
     }
   }
 
@@ -53,8 +55,28 @@ class LeapAI {
       return response.data;
     } catch (error) {
       console.error('Error while LEAP AI Generated Image', error.message);
-      console.error('error', error);
-      return error;
+      throw new AppError(error.message, error.status);
+    }
+  }
+
+  async generateNewImage({ prompt }) {
+    try {
+      const negativePrompt =
+        'deformed iris, deformed pupils, semi-realistic, CGI, 3d, render, sketch, cartoon, drawing, anime:1.4, text, close up, cropped, out of frame, worst quality, low quality, jpeg artefacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck';
+      const response = await this.leapai.workflowRuns.workflow({
+        workflow_id: 'wkf_b3SPVsAflxf2y3',
+        input: {
+          prompt,
+          negativePrompt
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error while LEAP AI Generated Image with Workflow Generate Images with Realistic Vision 4',
+        error.message
+      );
+      throw new AppError(`LEAP AI ${error.message}`, error.status);
     }
   }
 
@@ -65,7 +87,7 @@ class LeapAI {
       });
     } catch (error) {
       console.error('Error while LEAP AI Checked Image', error);
-      return error;
+      throw new AppError(error.message, error.status);
     }
   }
 }

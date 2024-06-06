@@ -52,13 +52,26 @@ router
   );
 router.route('/:slug').get(newsController.getOneNewsBySlug); // renamed getNews to getOneNewsBySlug
 router
-  .route('/:id') // switch back from slug to id
-  // .get(newsController.getNews) // separated(moved up) GET method from PATCH and DELETE to be able catch id
+  .route('/:id')
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'user'),
+    newsController.generateNewLeapAiImages,
+    newsController.updateNews
+  );
+router
+  .route('/:id') // switch back from slug to id - to not rewrite all code
+  // .get(newsController.getNews) // separated(moved up /:slug) GET method from PATCH and DELETE to be able catch id
   .patch(
     authController.protect,
     authController.restrictTo('admin', 'user'),
     newsController.uploadNewsImages,
     newsController.resizeNewsImages,
+    newsController.updateNews
+  )
+  .put(
+    authController.protect,
+    authController.restrictTo('admin', 'user'),
     newsController.updateNews
   )
   .delete(
