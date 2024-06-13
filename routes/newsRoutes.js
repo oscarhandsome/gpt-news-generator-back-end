@@ -1,6 +1,7 @@
 const express = require('express');
 const newsController = require('./../controllers/newsController');
 const authController = require('./../controllers/authController');
+const historyController = require('./../controllers/historyController');
 // const commentController = require('./../controllers/commentController');
 const commentRouter = require('./../routes/commentRoutes');
 
@@ -72,6 +73,7 @@ router
   .put(
     authController.protect,
     authController.restrictTo('admin', 'user'),
+    historyController.createHistory,
     newsController.updateNews
   )
   .delete(

@@ -19,6 +19,7 @@ const bookingController = require('./controllers/bookingController');
 const subscriptionRouter = require('./routes/subscriptionRoutes');
 const newsletterRouter = require('./routes/newsletterRoutes');
 const statsRouter = require('./routes/statsRoutes');
+const historyRouter = require('./routes/historyRoutes');
 
 const app = express();
 
@@ -110,6 +111,7 @@ app.use('/api/v1/bookings', bookingRouter);
 app.use('/api/v1/subscriptions', subscriptionRouter);
 app.use('/api/v1/newsletters', newsletterRouter);
 app.use('/api/v1/stats', statsRouter);
+app.use('/api/v1/history', historyRouter);
 
 app.all('*', (req, res, next) => {
   // res.status(404).json({
