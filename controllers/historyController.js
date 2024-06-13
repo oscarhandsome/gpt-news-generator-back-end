@@ -5,11 +5,13 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 // const factory = require('./handlerFactory');
 
+// exports.getHistory = factory.getOne(History); // not common case newsId instead id
+
 exports.getHistory = catchAsync(async (req, res, next) => {
   const doc = await History.findOne({ newsId: req.params.id });
 
   if (!doc) {
-    return next(new AppError('No document found with that Slug', 404));
+    return next(new AppError('No document found with that ID', 404));
   }
 
   res.status(200).json({
