@@ -33,7 +33,9 @@ mongoose
 
 const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  if (process.env.NODE_ENV === 'development')
+    console.log(`Example app listening at http://localhost:${port}`);
+  else console.log(`App listening at production`);
 });
 
 process.on('unhandledRejection', err => {
