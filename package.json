@@ -55,7 +55,7 @@
     "prettier": "^1.17.0"
   },
   "engines": {
-    "node": "^16",
+    "node": "v18.12",
     "pnpm": "^8"
   }
 }
